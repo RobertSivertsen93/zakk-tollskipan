@@ -1,8 +1,8 @@
 
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import FileUpload from '@/components/FileUpload';
-import { Toaster } from '@/components/ui/toaster';
+import { useToast } from '@/hooks/use-toast';
 
 interface CustomsItem {
   hsCode: string;
@@ -12,8 +12,34 @@ interface CustomsItem {
 const Index = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const { toast } = useToast();
+
+  // Check for error message in location state
+  useEffect(() => {
+    const locationState = location.state as { error?: string } || {};
+    if (locationState.error) {
+      toast({
+        title: "Error",
+        description: locationState.error,
+        variant: "destructive"
+      });
+      
+      // Clear the location state to prevent the error from showing again on refresh
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state, toast]);
 
   const handleFileSelect = (selectedFile: File) => {
+    if (!selectedFile) {
+      toast({
+        title: "Error",
+        description: "Please select a valid file to upload",
+        variant: "destructive"
+      });
+      return;
+    }
+    
     setIsProcessing(true);
     
     // Simulate processing delay - in a real app, this would be an API call
@@ -60,7 +86,6 @@ const Index = () => {
           )}
         </div>
       </div>
-      <Toaster />
     </div>
   );
 };

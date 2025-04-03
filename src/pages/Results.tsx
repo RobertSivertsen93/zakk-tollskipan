@@ -1,9 +1,9 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import PdfPreview from '@/components/PdfPreview';
 import ResultsTable from '@/components/ResultsTable';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Upload } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 
@@ -17,11 +17,22 @@ const Results = () => {
   const location = useLocation();
   const { toast } = useToast();
   
-  // Get the file and results from location state
-  const { file, results } = location.state as { 
-    file: File | null, 
-    results: CustomsItem[] 
-  };
+  // Safely access location.state with default values
+  const locationState = location.state || {};
+  const file = locationState.file || null;
+  const results = locationState.results || [];
+
+  // Redirect to home if no data is present
+  useEffect(() => {
+    if (!file && !results.length) {
+      navigate('/', { 
+        replace: true,
+        state: { 
+          error: 'No document data found. Please upload a document first.' 
+        }
+      });
+    }
+  }, [file, results, navigate]);
 
   const handleBack = () => {
     navigate('/');
