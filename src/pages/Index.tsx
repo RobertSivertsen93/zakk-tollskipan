@@ -7,6 +7,7 @@ import { useToast } from '@/hooks/use-toast';
 interface CustomsItem {
   hsCode: string;
   description: string;
+  confidence?: number; // Added confidence field
 }
 
 const Index = () => {
@@ -46,8 +47,21 @@ const Index = () => {
     setTimeout(() => {
       // Mock results for demonstration purposes
       const results = [
-        { hsCode: '8471.30.0100', description: 'Laptop computers, weight < 10kg' },
-        { hsCode: '8523.51.0000', description: 'Solid-state non-volatile storage devices' }
+        { 
+          hsCode: '8471.30.0100', 
+          description: 'Laptop computers, weight < 10kg',
+          confidence: 95
+        },
+        { 
+          hsCode: '8523.51.0000', 
+          description: 'Solid-state non-volatile storage devices',
+          confidence: 85 
+        },
+        { 
+          hsCode: '3926.90.9996', 
+          description: 'Other articles of plastics',
+          confidence: 72 
+        }
       ];
       
       // Navigate to results page with file and results

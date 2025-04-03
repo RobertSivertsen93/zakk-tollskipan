@@ -10,6 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 interface CustomsItem {
   hsCode: string;
   description: string;
+  confidence?: number; // Added confidence field
 }
 
 const Results = () => {
