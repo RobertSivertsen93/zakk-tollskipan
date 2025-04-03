@@ -1,12 +1,8 @@
 
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import FileUpload from '@/components/FileUpload';
-import PdfPreview from '@/components/PdfPreview';
-import ResultsTable from '@/components/ResultsTable';
 import { Toaster } from '@/components/ui/toaster';
-import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
 
 interface CustomsItem {
   hsCode: string;
@@ -14,32 +10,30 @@ interface CustomsItem {
 }
 
 const Index = () => {
-  const [file, setFile] = useState<File | null>(null);
-  const [results, setResults] = useState<CustomsItem[]>([]);
-  const [showResults, setShowResults] = useState(false);
-  const { toast } = useToast();
+  const [isProcessing, setIsProcessing] = useState(false);
+  const navigate = useNavigate();
 
   const handleFileSelect = (selectedFile: File) => {
-    setFile(selectedFile);
+    setIsProcessing(true);
     
     // Simulate processing delay - in a real app, this would be an API call
     setTimeout(() => {
       // Mock results for demonstration purposes
-      setResults([
+      const results = [
         { hsCode: '8471.30.0100', description: 'Laptop computers, weight < 10kg' },
         { hsCode: '8523.51.0000', description: 'Solid-state non-volatile storage devices' }
-      ]);
-      setShowResults(true);
+      ];
+      
+      // Navigate to results page with file and results
+      navigate('/results', { 
+        state: { 
+          file: selectedFile,
+          results: results
+        } 
+      });
+      
+      setIsProcessing(false);
     }, 1500);
-  };
-
-  const handleBack = () => {
-    setFile(null);
-    setShowResults(false);
-    toast({
-      title: "Ready for new document",
-      description: "You can now upload a new customs document",
-    });
   };
 
   return (
@@ -56,37 +50,13 @@ const Index = () => {
         </header>
 
         <div className="space-y-8">
-          {!file && (
-            <FileUpload onFileSelect={handleFileSelect} />
-          )}
-
-          {file && (
-            <>
-              <div className="flex justify-between items-center">
-                <Button 
-                  variant="outline" 
-                  onClick={handleBack}
-                  className="flex items-center gap-2 text-custom-blue-600 border-custom-blue-200 hover:bg-custom-blue-50"
-                >
-                  <ArrowLeft className="h-4 w-4" />
-                  Upload New Document
-                </Button>
-              </div>
-              <div className="grid gap-8 lg:grid-cols-2">
-                <div>
-                  <h2 className="text-lg font-medium text-custom-blue-600 mb-4">
-                    Document Preview
-                  </h2>
-                  <PdfPreview file={file} />
-                </div>
-                <div>
-                  <h2 className="text-lg font-medium text-custom-blue-600 mb-4">
-                    Extracted Information
-                  </h2>
-                  <ResultsTable data={results} isVisible={showResults} />
-                </div>
-              </div>
-            </>
+          <FileUpload onFileSelect={handleFileSelect} />
+          
+          {isProcessing && (
+            <div className="text-center py-4">
+              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-custom-blue-600 mb-2"></div>
+              <p className="text-custom-gray-500">Processing your document...</p>
+            </div>
           )}
         </div>
       </div>
