@@ -4,6 +4,9 @@ import FileUpload from '@/components/FileUpload';
 import PdfPreview from '@/components/PdfPreview';
 import ResultsTable from '@/components/ResultsTable';
 import { Toaster } from '@/components/ui/toaster';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 interface CustomsItem {
   hsCode: string;
@@ -14,6 +17,7 @@ const Index = () => {
   const [file, setFile] = useState<File | null>(null);
   const [results, setResults] = useState<CustomsItem[]>([]);
   const [showResults, setShowResults] = useState(false);
+  const { toast } = useToast();
 
   const handleFileSelect = (selectedFile: File) => {
     setFile(selectedFile);
@@ -27,6 +31,15 @@ const Index = () => {
       ]);
       setShowResults(true);
     }, 1500);
+  };
+
+  const handleBack = () => {
+    setFile(null);
+    setShowResults(false);
+    toast({
+      title: "Ready for new document",
+      description: "You can now upload a new customs document",
+    });
   };
 
   return (
@@ -48,20 +61,32 @@ const Index = () => {
           )}
 
           {file && (
-            <div className="grid gap-8 lg:grid-cols-2">
-              <div>
-                <h2 className="text-lg font-medium text-custom-blue-600 mb-4">
-                  Document Preview
-                </h2>
-                <PdfPreview file={file} />
+            <>
+              <div className="flex justify-between items-center">
+                <Button 
+                  variant="outline" 
+                  onClick={handleBack}
+                  className="flex items-center gap-2 text-custom-blue-600 border-custom-blue-200 hover:bg-custom-blue-50"
+                >
+                  <ArrowLeft className="h-4 w-4" />
+                  Upload New Document
+                </Button>
               </div>
-              <div>
-                <h2 className="text-lg font-medium text-custom-blue-600 mb-4">
-                  Extracted Information
-                </h2>
-                <ResultsTable data={results} isVisible={showResults} />
+              <div className="grid gap-8 lg:grid-cols-2">
+                <div>
+                  <h2 className="text-lg font-medium text-custom-blue-600 mb-4">
+                    Document Preview
+                  </h2>
+                  <PdfPreview file={file} />
+                </div>
+                <div>
+                  <h2 className="text-lg font-medium text-custom-blue-600 mb-4">
+                    Extracted Information
+                  </h2>
+                  <ResultsTable data={results} isVisible={showResults} />
+                </div>
               </div>
-            </div>
+            </>
           )}
         </div>
       </div>
