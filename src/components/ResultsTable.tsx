@@ -7,7 +7,7 @@ import { useToast } from '@/hooks/use-toast';
 interface CustomsItem {
   hsCode: string;
   description: string;
-  confidence?: number; // Added confidence field
+  confidence?: number;
 }
 
 interface ResultsTableProps {
@@ -58,13 +58,13 @@ export default function ResultsTable({ data, isVisible }: ResultsTableProps) {
   };
 
   return (
-    <Card className="border border-custom-gray-200 shadow-sm bg-white">
-      <CardHeader className="bg-custom-gray-50 border-b border-custom-gray-200 pb-3">
+    <Card className="border border-custom-zakk-mint/30 shadow-sm bg-white">
+      <CardHeader className="bg-custom-zakk-navy/5 border-b border-custom-zakk-mint/30 pb-3">
         <div className="flex items-center space-x-2">
-          <div className="rounded-full bg-custom-blue-100 p-1">
-            <Check className="h-4 w-4 text-custom-blue-500" />
+          <div className="rounded-full bg-custom-zakk-mint p-1">
+            <Check className="h-4 w-4 text-custom-zakk-navy" />
           </div>
-          <CardTitle className="text-lg font-medium text-custom-blue-600">
+          <CardTitle className="text-lg font-medium text-custom-zakk-navy">
             Results
           </CardTitle>
         </div>
@@ -74,23 +74,23 @@ export default function ResultsTable({ data, isVisible }: ResultsTableProps) {
           <table className="result-table">
             <thead>
               <tr>
-                <th className="w-[30%]">HS Code</th>
-                <th className="w-[50%]">Product Description</th>
-                <th className="w-[20%]">Confidence</th>
+                <th className="w-[30%] bg-custom-zakk-navy text-white">HS Code</th>
+                <th className="w-[50%] bg-custom-zakk-navy text-white">Product Description</th>
+                <th className="w-[20%] bg-custom-zakk-navy text-white">Confidence</th>
               </tr>
             </thead>
             <tbody>
               {enrichedData.map((item, index) => (
-                <tr key={index}>
+                <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
                   <td>
                     <div className="flex items-center gap-2 font-mono">
                       {item.hsCode}
                       <button 
                         onClick={() => handleCopyHsCode(item.hsCode)}
-                        className="p-1 rounded hover:bg-custom-gray-100 transition-colors"
+                        className="p-1 rounded hover:bg-custom-zakk-peach/20 transition-colors"
                         title="Copy HS Code"
                       >
-                        <Copy className="h-4 w-4 text-custom-blue-500" />
+                        <Copy className="h-4 w-4 text-custom-zakk-peach" />
                       </button>
                     </div>
                   </td>
