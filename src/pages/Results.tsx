@@ -3,14 +3,14 @@ import React, { useEffect } from 'react';
 import PdfPreview from '@/components/PdfPreview';
 import ResultsTable from '@/components/ResultsTable';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Package } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 
 interface CustomsItem {
   hsCode: string;
   description: string;
-  confidence?: number; // Added confidence field
+  confidence?: number;
 }
 
 const Results = () => {
@@ -46,13 +46,13 @@ const Results = () => {
   return (
     <div className="min-h-screen bg-custom-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
-        <header className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-custom-blue-600 mb-2">
-            Customs HS Code Results
-          </h1>
-          <p className="text-custom-gray-400 max-w-2xl mx-auto">
-            Here are the extracted HS codes and product descriptions from your document.
-          </p>
+        <header className="mb-12 text-center">
+          <div className="flex items-center justify-center mb-4">
+            <Package className="h-10 w-10 text-black mr-2" />
+            <h1 className="text-4xl font-light tracking-tight text-black">
+              Zakk
+            </h1>
+          </div>
         </header>
 
         <div className="space-y-8">
@@ -60,7 +60,7 @@ const Results = () => {
             <Button 
               variant="outline" 
               onClick={handleBack}
-              className="flex items-center gap-2 text-custom-blue-600 border-custom-blue-200 hover:bg-custom-blue-50"
+              className="flex items-center gap-2 text-black border-custom-gray-200 hover:bg-custom-gray-100"
             >
               <ArrowLeft className="h-4 w-4" />
               Upload New Document
@@ -69,13 +69,13 @@ const Results = () => {
           
           <div className="grid gap-8 lg:grid-cols-2">
             <div>
-              <h2 className="text-lg font-medium text-custom-blue-600 mb-4">
+              <h2 className="text-lg font-medium text-black mb-4">
                 Document Preview
               </h2>
               {file && <PdfPreview file={file} />}
             </div>
             <div>
-              <h2 className="text-lg font-medium text-custom-blue-600 mb-4">
+              <h2 className="text-lg font-medium text-black mb-4">
                 Extracted Information
               </h2>
               <ResultsTable data={results} isVisible={true} />
