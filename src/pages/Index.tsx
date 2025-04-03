@@ -98,6 +98,18 @@ const Index = () => {
               <p className="text-custom-gray-500">Processing your document...</p>
             </div>
           )}
+          
+          {/* Add instructions below the upload area */}
+          <div className="max-w-lg mx-auto">
+            <div className="flex items-start space-x-3 mb-4">
+              <div className="flex-shrink-0 bg-black text-white w-6 h-6 rounded-full flex items-center justify-center text-sm font-medium">1</div>
+              <p className="text-custom-gray-700">Upload your customs document or invoice PDF to automatically extract HS codes and product descriptions.</p>
+            </div>
+            <div className="flex items-start space-x-3">
+              <div className="flex-shrink-0 bg-black text-white w-6 h-6 rounded-full flex items-center justify-center text-sm font-medium">2</div>
+              <p className="text-custom-gray-700">Review the extracted information and return to upload additional documents as needed.</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
