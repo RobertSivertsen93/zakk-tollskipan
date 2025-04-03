@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import FileUpload from '@/components/FileUpload';
 import { useToast } from '@/hooks/use-toast';
+import { Package } from 'lucide-react';
 
 interface CustomsItem {
   hsCode: string;
@@ -77,39 +78,36 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-custom-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
         <header className="mb-12 text-center">
           <div className="flex items-center justify-center mb-4">
-            <img 
-              src="/zakk-logo.png" 
-              alt="Zakk Logo" 
-              className="h-20"
-            />
+            <Package className="h-10 w-10 text-black mr-2" />
+            <h1 className="text-4xl font-light tracking-tight text-black">
+              Zakk
+            </h1>
           </div>
         </header>
 
         <div className="space-y-8">
-          <div className="bg-white rounded-lg p-6 shadow-sm border border-custom-zakk-mint/30">
-            <FileUpload onFileSelect={handleFileSelect} />
-          </div>
+          <FileUpload onFileSelect={handleFileSelect} />
           
           {isProcessing && (
             <div className="text-center py-4">
-              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-custom-zakk-navy mb-2"></div>
-              <p className="text-custom-zakk-navy">Processing your document...</p>
+              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-black mb-2"></div>
+              <p className="text-custom-gray-500">Processing your document...</p>
             </div>
           )}
           
-          {/* Instructions below the upload area */}
+          {/* Add instructions below the upload area */}
           <div className="max-w-lg mx-auto">
             <div className="flex items-start space-x-3 mb-4">
-              <div className="flex-shrink-0 bg-custom-zakk-navy text-white w-6 h-6 rounded-full flex items-center justify-center text-sm font-medium">1</div>
-              <p className="text-custom-zakk-navy">Upload your customs document or invoice PDF to automatically extract HS codes and product descriptions.</p>
+              <div className="flex-shrink-0 bg-black text-white w-6 h-6 rounded-full flex items-center justify-center text-sm font-medium">1</div>
+              <p className="text-custom-gray-700">Upload your customs document or invoice PDF to automatically extract HS codes and product descriptions.</p>
             </div>
             <div className="flex items-start space-x-3">
-              <div className="flex-shrink-0 bg-custom-zakk-navy text-white w-6 h-6 rounded-full flex items-center justify-center text-sm font-medium">2</div>
-              <p className="text-custom-zakk-navy">Review the extracted information and return to upload additional documents as needed.</p>
+              <div className="flex-shrink-0 bg-black text-white w-6 h-6 rounded-full flex items-center justify-center text-sm font-medium">2</div>
+              <p className="text-custom-gray-700">Review the extracted information and return to upload additional documents as needed.</p>
             </div>
           </div>
         </div>

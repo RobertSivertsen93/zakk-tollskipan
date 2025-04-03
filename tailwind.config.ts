@@ -82,14 +82,6 @@ export default {
 						200: '#E2E8F0',
 						300: '#CBD5E1',
 						400: '#94A3B8',
-					},
-					// New colors from the Zakk logo
-					zakk: {
-						navy: '#1E1E2D',      // Dark navy (from logo text)
-						peach: '#F8AA76',     // Peach color (from logo squares)
-						mint: '#B6E5C5',      // Mint green (from logo squares)
-						lightPeach: '#FFC8A2', // Lighter peach (for hover states)
-						lightMint: '#D4F0DD',  // Lighter mint (for hover states)
 					}
 				}
 			},
