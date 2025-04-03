@@ -38,8 +38,8 @@ export default function ResultsTable({ data, isVisible }: ResultsTableProps) {
           <table className="result-table">
             <thead>
               <tr>
-                <th width="40%">HS Code</th>
-                <th width="60%">Product Description</th>
+                <th className="w-[40%]">HS Code</th>
+                <th className="w-[60%]">Product Description</th>
               </tr>
             </thead>
             <tbody>
