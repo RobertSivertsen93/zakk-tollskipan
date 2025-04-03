@@ -82,9 +82,9 @@ const Index = () => {
         <header className="mb-12 text-center">
           <div className="flex items-center justify-center mb-4">
             <img 
-              src="/lovable-uploads/0c5a80cb-e7ce-4e19-8090-169465220591.png" 
+              src="/zakk-logo.png" 
               alt="Zakk Logo" 
-              className="h-14"
+              className="h-20"
             />
           </div>
         </header>
