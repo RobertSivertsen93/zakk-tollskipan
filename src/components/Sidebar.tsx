@@ -4,7 +4,6 @@ import { Link, useLocation } from "react-router-dom";
 import { 
   Search, 
   FileSpreadsheet, 
-  Globe, 
   Table,
   FileText
 } from "lucide-react";
@@ -57,14 +56,6 @@ const Sidebar = () => {
           active={currentPath === "/"}
         >
           Process PDF file
-        </NavItem>
-        
-        <NavItem 
-          to="/api-access" 
-          icon={Globe}
-          active={currentPath === "/api-access"}
-        >
-          API Access
         </NavItem>
         
         <NavItem 
