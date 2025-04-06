@@ -99,7 +99,7 @@ export default function FileUpload({ onFileSelect }: FileUploadProps) {
         />
       </div>
       <p className="text-custom-gray-400 text-center mb-6">
-        Drag and drop PDF file here
+        Vel ella slepp PDF fílu her
       </p>
       <input
         type="file"
@@ -113,7 +113,7 @@ export default function FileUpload({ onFileSelect }: FileUploadProps) {
         className="bg-custom-blue-500 hover:bg-custom-blue-600 text-white"
       >
         <FileText className="mr-2 h-4 w-4" />
-        Browse Files
+        Vel fílu
       </Button>
     </div>
   );
