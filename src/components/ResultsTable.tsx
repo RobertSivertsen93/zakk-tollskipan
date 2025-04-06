@@ -118,16 +118,31 @@ export default function ResultsTable({ data, isVisible }: ResultsTableProps) {
   };
 
   const toggleInvoiceComplete = (invoiceId: string) => {
+    const newCompletedState = !completedInvoices[invoiceId];
+    
     setCompletedInvoices(prev => ({
       ...prev,
-      [invoiceId]: !prev[invoiceId]
+      [invoiceId]: newCompletedState
     }));
     
+    // When completing an invoice, also collapse it
+    if (newCompletedState) {
+      setExpandedInvoices(prev => ({
+        ...prev,
+        [invoiceId]: false
+      }));
+    } else {
+      // When uncompleting an invoice, expand it
+      setExpandedInvoices(prev => ({
+        ...prev,
+        [invoiceId]: true
+      }));
+    }
+    
     // Notify user with toast
-    const isNowComplete = !completedInvoices[invoiceId];
     toast({
-      title: isNowComplete ? "Invoice Marked Complete" : "Invoice Marked Incomplete",
-      description: isNowComplete ? 
+      title: newCompletedState ? "Invoice Marked Complete" : "Invoice Marked Incomplete",
+      description: newCompletedState ? 
         `Invoice #${invoiceId} has been marked as processed` : 
         `Invoice #${invoiceId} has been marked for further review`,
     });
@@ -143,7 +158,9 @@ export default function ResultsTable({ data, isVisible }: ResultsTableProps) {
   // Render invoice header with checkbox
   const renderInvoiceHeader = (invoiceId: string) => {
     const isComplete = completedInvoices[invoiceId] || false;
-    const isExpanded = expandedInvoices[invoiceId] !== false; // Default to expanded
+    // An invoice is expanded if it's explicitly set to true OR if it's not complete and not explicitly set to false
+    const isExpanded = expandedInvoices[invoiceId] === true || 
+                      (!isComplete && expandedInvoices[invoiceId] !== false);
     
     return (
       <tr className={isComplete ? "opacity-60 bg-gray-50" : ""}>
@@ -260,7 +277,10 @@ export default function ResultsTable({ data, isVisible }: ResultsTableProps) {
             </thead>
             <tbody>
               {Object.entries(groupedItems).map(([invoiceId, items], groupIndex) => {
-                const isExpanded = expandedInvoices[invoiceId] !== false; // Default to expanded
+                const isComplete = completedInvoices[invoiceId] || false;
+                // An invoice is expanded if it's explicitly set to true OR if it's not complete and not explicitly set to false
+                const isExpanded = expandedInvoices[invoiceId] === true || 
+                                (!isComplete && expandedInvoices[invoiceId] !== false);
                 
                 return (
                   <React.Fragment key={invoiceId}>
