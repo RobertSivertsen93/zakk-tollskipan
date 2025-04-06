@@ -3,7 +3,6 @@ import { Copy, ChevronDown, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 interface HSCodeItem {
   id: string;
@@ -129,144 +128,100 @@ const HSCodeLookup: React.FC = () => {
 
   return (
     <div className="flex flex-col h-full w-full bg-background">
-      <Tabs defaultValue="hs" className="w-full flex-1 flex flex-col">
-        <TabsList className="w-full grid grid-cols-7 gap-2 px-4 py-2">
-          <TabsTrigger value="hs">HS</TabsTrigger>
-          <TabsTrigger value="usa">USA</TabsTrigger>
-          <TabsTrigger value="eu">European Union</TabsTrigger>
-          <TabsTrigger value="gb">Great Britain</TabsTrigger>
-          <TabsTrigger value="ca">Canada</TabsTrigger>
-          <TabsTrigger value="cn">China</TabsTrigger>
-          <TabsTrigger value="jp">Japan</TabsTrigger>
-        </TabsList>
-        
-        <TabsContent value="hs" className="flex-1 overflow-auto">
-          <div className="flex flex-col space-y-1">
-            {filteredHSCodes.map((item) => (
-              <div 
-                key={item.id} 
-                className="border-b border-border last:border-b-0"
-              >
-                <div className="flex items-center p-4 hover:bg-muted/50 cursor-pointer" onClick={() => toggleExpand(item.id)}>
-                  {expandedItem === item.id ? 
-                    <ChevronDown className="w-5 h-5 text-muted-foreground mr-2" /> : 
-                    <ChevronRight className="w-5 h-5 text-muted-foreground mr-2" />
-                  }
+      <div className="border-b px-4 py-3 flex items-center">
+        <h2 className="text-lg font-semibold">Faroe Islands HS Code Lookup</h2>
+      </div>
+      
+      <div className="flex-1 overflow-auto">
+        <div className="flex flex-col space-y-1">
+          {filteredHSCodes.map((item) => (
+            <div 
+              key={item.id} 
+              className="border-b border-border last:border-b-0"
+            >
+              <div className="flex items-center p-4 hover:bg-muted/50 cursor-pointer" onClick={() => toggleExpand(item.id)}>
+                {expandedItem === item.id ? 
+                  <ChevronDown className="w-5 h-5 text-muted-foreground mr-2" /> : 
+                  <ChevronRight className="w-5 h-5 text-muted-foreground mr-2" />
+                }
+                
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-3">
+                    <span className="font-medium text-sm">{item.description}</span>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="h-7 px-2 ml-auto"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleCopyDescription(item.description);
+                      }}
+                    >
+                      <Copy className="h-3.5 w-3.5" />
+                      <span className="sr-only">Copy description</span>
+                    </Button>
+                  </div>
                   
-                  <div className="flex-1 min-w-0">
+                  <div className="flex items-center mt-1">
                     <div className="flex items-center gap-3">
-                      <span className="font-medium text-sm">{item.description}</span>
+                      <span className="text-blue-500 font-mono">{item.code}</span>
                       <Button 
                         variant="ghost" 
-                        size="sm" 
-                        className="h-7 px-2 ml-auto"
+                        size="sm"
+                        className="h-7 px-2" 
                         onClick={(e) => {
                           e.stopPropagation();
-                          handleCopyDescription(item.description);
+                          handleCopyCode(item.code);
                         }}
                       >
                         <Copy className="h-3.5 w-3.5" />
-                        <span className="sr-only">Copy description</span>
+                        <span className="sr-only">Copy HS code</span>
                       </Button>
                     </div>
                     
-                    <div className="flex items-center mt-1">
-                      <div className="flex items-center gap-3">
-                        <span className="text-blue-500 font-mono">{item.code}</span>
-                        <Button 
-                          variant="ghost" 
-                          size="sm"
-                          className="h-7 px-2" 
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleCopyCode(item.code);
-                          }}
-                        >
-                          <Copy className="h-3.5 w-3.5" />
-                          <span className="sr-only">Copy HS code</span>
-                        </Button>
-                      </div>
-                      
-                      <div className="ml-auto flex items-center gap-2">
-                        <span className={`text-xs text-white px-2 py-0.5 rounded-md ${getConfidenceColor(item.confidence)}`}>
-                          {item.confidence}%
-                        </span>
-                      </div>
+                    <div className="ml-auto flex items-center gap-2">
+                      <span className={`text-xs text-white px-2 py-0.5 rounded-md ${getConfidenceColor(item.confidence)}`}>
+                        {item.confidence}%
+                      </span>
                     </div>
                   </div>
                 </div>
-                
-                {expandedItem === item.id && item.details && (
-                  <div className="bg-muted/30 px-4 py-3 border-t border-border">
-                    <div className="text-sm space-y-2">
-                      <div>
-                        <div className="font-medium">Category</div>
-                        <div className="text-muted-foreground">{item.details.category}</div>
-                      </div>
-                      
-                      {item.details.subcategory && (
-                        <div>
-                          <div className="font-medium">Subcategory</div>
-                          <div className="text-muted-foreground">{item.details.subcategory}</div>
-                        </div>
-                      )}
-                      
-                      {item.details.specification && (
-                        <div>
-                          <div className="font-medium">Specification</div>
-                          <div className="text-muted-foreground">{item.details.specification}</div>
-                        </div>
-                      )}
+              </div>
+              
+              {expandedItem === item.id && item.details && (
+                <div className="bg-muted/30 px-4 py-3 border-t border-border">
+                  <div className="text-sm space-y-2">
+                    <div>
+                      <div className="font-medium">Category</div>
+                      <div className="text-muted-foreground">{item.details.category}</div>
                     </div>
+                    
+                    {item.details.subcategory && (
+                      <div>
+                        <div className="font-medium">Subcategory</div>
+                        <div className="text-muted-foreground">{item.details.subcategory}</div>
+                      </div>
+                    )}
+                    
+                    {item.details.specification && (
+                      <div>
+                        <div className="font-medium">Specification</div>
+                        <div className="text-muted-foreground">{item.details.specification}</div>
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-            ))}
-            
-            {filteredHSCodes.length === 0 && (
-              <div className="p-8 text-center text-muted-foreground">
-                No HS codes found matching your search.
-              </div>
-            )}
-          </div>
-        </TabsContent>
-        
-        <TabsContent value="usa" className="flex-1">
-          <div className="p-8 text-center text-muted-foreground">
-            USA HS codes will be displayed here.
-          </div>
-        </TabsContent>
-        
-        <TabsContent value="eu" className="flex-1">
-          <div className="p-8 text-center text-muted-foreground">
-            European Union HS codes will be displayed here.
-          </div>
-        </TabsContent>
-        
-        <TabsContent value="gb" className="flex-1">
-          <div className="p-8 text-center text-muted-foreground">
-            Great Britain HS codes will be displayed here.
-          </div>
-        </TabsContent>
-        
-        <TabsContent value="ca" className="flex-1">
-          <div className="p-8 text-center text-muted-foreground">
-            Canada HS codes will be displayed here.
-          </div>
-        </TabsContent>
-        
-        <TabsContent value="cn" className="flex-1">
-          <div className="p-8 text-center text-muted-foreground">
-            China HS codes will be displayed here.
-          </div>
-        </TabsContent>
-        
-        <TabsContent value="jp" className="flex-1">
-          <div className="p-8 text-center text-muted-foreground">
-            Japan HS codes will be displayed here.
-          </div>
-        </TabsContent>
-      </Tabs>
+                </div>
+              )}
+            </div>
+          ))}
+          
+          {filteredHSCodes.length === 0 && (
+            <div className="p-8 text-center text-muted-foreground">
+              No HS codes found matching your search.
+            </div>
+          )}
+        </div>
+      </div>
       
       <div className="border-t p-4">
         <div className="relative">
