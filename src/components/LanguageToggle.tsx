@@ -1,7 +1,6 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Flag } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const LanguageToggle = () => {
@@ -18,8 +17,9 @@ const LanguageToggle = () => {
       aria-hidden="true"
     >
       <rect width="16" height="12" fill="#FFFFFF"/>
-      <rect x="0" y="4" width="16" height="4" fill="#0065BD"/>
-      <rect x="4" y="0" width="4" height="12" fill="#ED2939"/>
+      <path d="M0,0 L16,12 M0,12 L16,0" stroke="#FF0000" strokeWidth="0.5" fill="none"/>
+      <rect x="0" y="4" width="16" height="4" fill="#0035AD"/>
+      <rect x="4" y="0" width="4" height="12" fill="#FF0000"/>
     </svg>
   );
   
