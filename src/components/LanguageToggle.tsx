@@ -1,7 +1,7 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Language } from "lucide-react";
+import { Languages } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const LanguageToggle = () => {
@@ -14,7 +14,7 @@ const LanguageToggle = () => {
       onClick={toggleLanguage}
       className="flex gap-1 items-center"
     >
-      <Language className="h-4 w-4" />
+      <Languages className="h-4 w-4" />
       <span>{language === "en" ? "FO" : "EN"}</span>
     </Button>
   );
