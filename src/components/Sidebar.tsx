@@ -4,8 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import { 
   Search, 
   FileSpreadsheet, 
-  Table,
-  FileText
+  Table
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -65,14 +64,8 @@ const Sidebar = () => {
         >
           Browse HS table
         </NavItem>
-
-        <NavItem 
-          to="/results" 
-          icon={FileText}
-          active={currentPath === "/results"}
-        >
-          Results
-        </NavItem>
+        
+        {/* Results page removed from navigation since it's only needed after processing a PDF */}
       </nav>
       
       <div className="p-4 border-t">
