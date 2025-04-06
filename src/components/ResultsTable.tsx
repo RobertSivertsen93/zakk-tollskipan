@@ -3,11 +3,13 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Check, Copy } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { Separator } from '@/components/ui/separator';
 
 interface CustomsItem {
   hsCode: string;
   description: string;
-  confidence?: number; // Added confidence field
+  confidence?: number;
+  invoiceId?: string; // Added to identify which invoice the item belongs to
 }
 
 interface ResultsTableProps {
@@ -20,10 +22,11 @@ export default function ResultsTable({ data, isVisible }: ResultsTableProps) {
   
   if (!isVisible) return null;
 
-  // Ensure each item has a confidence value if not provided
-  const enrichedData = data.map(item => ({
+  // Ensure each item has a confidence value and invoiceId if not provided
+  const enrichedData = data.map((item, index) => ({
     ...item,
-    confidence: item.confidence || Math.floor(Math.random() * 30) + 70 // Random value between 70-99% if not provided
+    confidence: item.confidence || Math.floor(Math.random() * 30) + 70, // Random value between 70-99% if not provided
+    invoiceId: item.invoiceId || Math.floor(index / 2) + 1 // Group every 2 items as one invoice for demo purposes
   }));
 
   const handleCopyHsCode = (hsCode: string) => {
@@ -57,6 +60,36 @@ export default function ResultsTable({ data, isVisible }: ResultsTableProps) {
     return confidence >= 60 ? 'text-white' : 'text-white';
   };
 
+  // Render invoice header
+  const renderInvoiceHeader = (invoiceId: string) => (
+    <tr>
+      <td colSpan={3} className="py-2">
+        <div className="flex items-center py-2">
+          <div className="font-medium text-custom-gray-500 text-sm">Invoice #{invoiceId}</div>
+        </div>
+      </td>
+    </tr>
+  );
+
+  // Render separator between invoices
+  const renderSeparator = () => (
+    <tr>
+      <td colSpan={3} className="py-0">
+        <Separator className="my-2 bg-custom-gray-200" />
+      </td>
+    </tr>
+  );
+
+  // Group items by invoice ID
+  const groupedItems: Record<string, CustomsItem[]> = {};
+  enrichedData.forEach(item => {
+    const id = item.invoiceId?.toString() || '1';
+    if (!groupedItems[id]) {
+      groupedItems[id] = [];
+    }
+    groupedItems[id].push(item);
+  });
+
   return (
     <Card className="border border-custom-gray-200 shadow-sm bg-white">
       <CardHeader className="bg-custom-gray-50 border-b border-custom-gray-200 pb-3">
@@ -80,29 +113,35 @@ export default function ResultsTable({ data, isVisible }: ResultsTableProps) {
               </tr>
             </thead>
             <tbody>
-              {enrichedData.map((item, index) => (
-                <tr key={index}>
-                  <td>
-                    <div className="flex items-center gap-2 font-mono">
-                      {item.hsCode}
-                      <button 
-                        onClick={() => handleCopyHsCode(item.hsCode)}
-                        className="p-1 rounded hover:bg-custom-gray-100 transition-colors"
-                        title="Copy HS Code"
-                      >
-                        <Copy className="h-4 w-4 text-custom-blue-500" />
-                      </button>
-                    </div>
-                  </td>
-                  <td>{item.description}</td>
-                  <td>
-                    <div className="flex items-center">
-                      <div className={`${getConfidenceColor(item.confidence)} ${getConfidenceTextColor(item.confidence)} text-center rounded px-2 py-1 font-medium text-sm`}>
-                        {item.confidence}%
-                      </div>
-                    </div>
-                  </td>
-                </tr>
+              {Object.entries(groupedItems).map(([invoiceId, items], groupIndex) => (
+                <React.Fragment key={invoiceId}>
+                  {groupIndex > 0 && renderSeparator()}
+                  {renderInvoiceHeader(invoiceId)}
+                  {items.map((item, index) => (
+                    <tr key={`${invoiceId}-${index}`}>
+                      <td>
+                        <div className="flex items-center gap-2 font-mono">
+                          {item.hsCode}
+                          <button 
+                            onClick={() => handleCopyHsCode(item.hsCode)}
+                            className="p-1 rounded hover:bg-custom-gray-100 transition-colors"
+                            title="Copy HS Code"
+                          >
+                            <Copy className="h-4 w-4 text-custom-blue-500" />
+                          </button>
+                        </div>
+                      </td>
+                      <td>{item.description}</td>
+                      <td>
+                        <div className="flex items-center">
+                          <div className={`${getConfidenceColor(item.confidence)} ${getConfidenceTextColor(item.confidence)} text-center rounded px-2 py-1 font-medium text-sm`}>
+                            {item.confidence}%
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </React.Fragment>
               ))}
             </tbody>
           </table>
