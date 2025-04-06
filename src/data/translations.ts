@@ -27,7 +27,7 @@ export const translations = {
     sidebar: {
       lookupHsCodes: "Leita eftir HS kodum",
       processPdfFile: "Viðgerð PDF fílu",
-      browseHsTable: "Browse HS table" // Keeping in English per user request
+      browseHsTable: "Toll- og vøruskráin"
     },
     index: {
       processTitle: "Viðgerð PDF fílu",
