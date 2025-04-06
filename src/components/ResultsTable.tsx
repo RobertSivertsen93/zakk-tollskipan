@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Check, Copy } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -7,6 +7,7 @@ import { Separator } from '@/components/ui/separator';
 import { CustomsItem } from '@/types/results';
 import { InvoiceHeader } from './results/InvoiceHeader';
 import { InvoiceContent } from './results/InvoiceContent';
+import { useInvoiceState } from '@/hooks/useInvoiceState';
 
 interface ResultsTableProps {
   data: CustomsItem[];
@@ -15,8 +16,6 @@ interface ResultsTableProps {
 
 export default function ResultsTable({ data, isVisible }: ResultsTableProps) {
   const { toast } = useToast();
-  const [completedInvoices, setCompletedInvoices] = useState<Record<string, boolean>>({});
-  const [expandedInvoices, setExpandedInvoices] = useState<Record<string, boolean>>({});
   
   if (!isVisible) return null;
 
@@ -26,6 +25,14 @@ export default function ResultsTable({ data, isVisible }: ResultsTableProps) {
     confidence: item.confidence || Math.floor(Math.random() * 30) + 70, // Random value between 70-99% if not provided
     invoiceId: item.invoiceId || String(Math.floor(index / 2) + 1) // Convert to string to fix type error
   }));
+
+  const { 
+    toggleInvoiceComplete, 
+    toggleInvoiceExpanded, 
+    groupItemsByInvoice,
+    isInvoiceExpanded,
+    isInvoiceComplete
+  } = useInvoiceState(enrichedData);
 
   const handleCopyHsCode = (hsCode: string) => {
     navigator.clipboard.writeText(hsCode)
@@ -45,44 +52,6 @@ export default function ResultsTable({ data, isVisible }: ResultsTableProps) {
       });
   };
 
-  const toggleInvoiceComplete = (invoiceId: string) => {
-    const newCompletedState = !completedInvoices[invoiceId];
-    
-    setCompletedInvoices(prev => ({
-      ...prev,
-      [invoiceId]: newCompletedState
-    }));
-    
-    // When completing an invoice, also collapse it
-    if (newCompletedState) {
-      setExpandedInvoices(prev => ({
-        ...prev,
-        [invoiceId]: false
-      }));
-    } else {
-      // When uncompleting an invoice, expand it
-      setExpandedInvoices(prev => ({
-        ...prev,
-        [invoiceId]: true
-      }));
-    }
-    
-    // Notify user with toast
-    toast({
-      title: newCompletedState ? "Invoice Marked Complete" : "Invoice Marked Incomplete",
-      description: newCompletedState ? 
-        `Invoice #${invoiceId} has been marked as processed` : 
-        `Invoice #${invoiceId} has been marked for further review`,
-    });
-  };
-
-  const toggleInvoiceExpanded = (invoiceId: string) => {
-    setExpandedInvoices(prev => ({
-      ...prev,
-      [invoiceId]: !prev[invoiceId]
-    }));
-  };
-
   // Render separator between invoices
   const renderSeparator = () => (
     <tr>
@@ -93,14 +62,7 @@ export default function ResultsTable({ data, isVisible }: ResultsTableProps) {
   );
 
   // Group items by invoice ID
-  const groupedItems: Record<string, CustomsItem[]> = {};
-  enrichedData.forEach(item => {
-    const id = item.invoiceId || '1';
-    if (!groupedItems[id]) {
-      groupedItems[id] = [];
-    }
-    groupedItems[id].push(item);
-  });
+  const groupedItems = groupItemsByInvoice(enrichedData);
 
   return (
     <Card className="border border-custom-gray-200 shadow-sm bg-white">
@@ -126,10 +88,8 @@ export default function ResultsTable({ data, isVisible }: ResultsTableProps) {
             </thead>
             <tbody>
               {Object.entries(groupedItems).map(([invoiceId, items], groupIndex) => {
-                const isComplete = completedInvoices[invoiceId] || false;
-                // An invoice is expanded if it's explicitly set to true OR if it's not complete and not explicitly set to false
-                const isExpanded = expandedInvoices[invoiceId] === true || 
-                                (!isComplete && expandedInvoices[invoiceId] !== false);
+                const isComplete = isInvoiceComplete(invoiceId);
+                const isExpanded = isInvoiceExpanded(invoiceId);
                 
                 return (
                   <React.Fragment key={invoiceId}>
