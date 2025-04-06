@@ -9,6 +9,7 @@ interface InvoiceContentProps {
   isComplete: boolean;
   onCopyHsCode: (hsCode: string) => void;
   onSelectAlternative?: (alternativeHsCode: string, originalItem: CustomsItem) => void;
+  onResetToOriginal?: (item: CustomsItem) => void;
 }
 
 export const InvoiceContent: React.FC<InvoiceContentProps> = ({ 
@@ -16,7 +17,8 @@ export const InvoiceContent: React.FC<InvoiceContentProps> = ({
   isExpanded, 
   isComplete,
   onCopyHsCode,
-  onSelectAlternative
+  onSelectAlternative,
+  onResetToOriginal
 }) => {
   if (!isExpanded) return null;
   
@@ -29,6 +31,7 @@ export const InvoiceContent: React.FC<InvoiceContentProps> = ({
           index={index}
           onCopyHsCode={onCopyHsCode}
           onSelectAlternative={onSelectAlternative}
+          onResetToOriginal={onResetToOriginal}
         />
       ))}
     </>

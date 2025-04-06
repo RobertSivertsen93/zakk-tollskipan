@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Check, Copy } from 'lucide-react';
@@ -65,15 +64,18 @@ export default function ResultsTable({ data, isVisible }: ResultsTableProps) {
           
           if (selectedAlt) {
             // Create new alternatives array without the selected one
-            const updatedAlternatives = [
-              { 
-                hsCode: originalItem.hsCode, 
+            const updatedAlternatives = originalItem.alternatives?.filter(
+              alt => alt.hsCode !== alternativeHsCode
+            ) || [];
+            
+            // Add the original as an alternative if this is the first change
+            if (!item.isAlternativeSelected) {
+              updatedAlternatives.unshift({
+                hsCode: originalItem.hsCode,
                 description: originalItem.description,
-                confidence: originalItem.confidence || 0 
-              },
-              ...(originalItem.alternatives || [])
-                .filter(alt => alt.hsCode !== alternativeHsCode)
-            ];
+                confidence: originalItem.confidence || 0
+              });
+            }
             
             // Return updated item with the selected alternative as the main HS code
             return {
@@ -81,6 +83,8 @@ export default function ResultsTable({ data, isVisible }: ResultsTableProps) {
               hsCode: selectedAlt.hsCode,
               description: selectedAlt.description, 
               confidence: selectedAlt.confidence,
+              isAlternativeSelected: true,
+              originalHsCode: item.originalHsCode || originalItem.hsCode,
               alternatives: updatedAlternatives
             };
           }
@@ -92,6 +96,51 @@ export default function ResultsTable({ data, isVisible }: ResultsTableProps) {
     toast({
       title: "HS Code changed",
       description: `Changed to ${alternativeHsCode}`,
+    });
+  };
+
+  const handleResetToOriginal = (item: CustomsItem) => {
+    if (!item.originalHsCode) return;
+    
+    setItemsData(prevItems => 
+      prevItems.map(prevItem => {
+        if (prevItem === item && prevItem.originalHsCode) {
+          // Find the original in alternatives
+          const originalAlt = prevItem.alternatives?.find(
+            alt => alt.hsCode === prevItem.originalHsCode
+          );
+          
+          if (originalAlt) {
+            // Return item with original values restored
+            return {
+              ...prevItem,
+              hsCode: prevItem.originalHsCode,
+              description: originalAlt.description,
+              confidence: originalAlt.confidence,
+              isAlternativeSelected: false,
+              originalHsCode: undefined,
+              // Keep alternatives but remove the original from alternatives
+              alternatives: prevItem.alternatives?.filter(
+                alt => alt.hsCode !== prevItem.originalHsCode
+              )
+            };
+          } else {
+            // If original not found in alternatives, just reset
+            return {
+              ...prevItem,
+              hsCode: prevItem.originalHsCode,
+              isAlternativeSelected: false,
+              originalHsCode: undefined
+            };
+          }
+        }
+        return prevItem;
+      })
+    );
+
+    toast({
+      title: "HS Code reset",
+      description: `Restored original HS Code`,
     });
   };
 
@@ -150,6 +199,7 @@ export default function ResultsTable({ data, isVisible }: ResultsTableProps) {
                       isComplete={isComplete}
                       onCopyHsCode={handleCopyHsCode}
                       onSelectAlternative={handleSelectAlternative}
+                      onResetToOriginal={handleResetToOriginal}
                     />
                   </React.Fragment>
                 );
