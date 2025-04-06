@@ -4,8 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import { 
   Search, 
   FileSpreadsheet, 
-  Table,
-  Package
+  Table
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -38,10 +37,7 @@ const Sidebar = () => {
   return (
     <div className="w-64 border-r bg-background h-screen flex flex-col">
       <div className="p-4 border-b">
-        <div className="flex items-center">
-          <Package className="h-6 w-6 mr-2" />
-          <h1 className="text-xl font-bold">Tariffy</h1>
-        </div>
+        <h1 className="text-xl font-bold">Tariffy</h1>
       </div>
       
       <nav className="flex-1 px-2 py-4 space-y-1">
