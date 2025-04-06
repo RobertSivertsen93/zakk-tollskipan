@@ -98,11 +98,8 @@ export default function FileUpload({ onFileSelect }: FileUploadProps) {
           strokeWidth={1.5} 
         />
       </div>
-      <h3 className="text-xl font-medium text-custom-blue-600 mb-2">
-        Upload your PDF file
-      </h3>
-      <p className="text-custom-gray-400 text-center mb-6 max-w-md">
-        Drag and drop your PDF file here, or click the button below to browse your files
+      <p className="text-custom-gray-400 text-center mb-6">
+        Drag and drop PDF file here
       </p>
       <input
         type="file"
