@@ -95,7 +95,7 @@ const Results = () => {
           <div className="flex items-center justify-center mb-4">
             <Package className="h-10 w-10 text-black mr-2" />
             <h1 className="text-4xl font-light tracking-tight text-black">
-              Tariffy
+              Zakk
             </h1>
           </div>
         </header>
