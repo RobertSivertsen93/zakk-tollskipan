@@ -11,6 +11,9 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
+import LanguageToggle from "./LanguageToggle";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { translations } from "@/data/translations";
 
 const NavItem = ({ to, icon: Icon, children, active, collapsed }: { 
   to: string;
@@ -39,6 +42,8 @@ const Sidebar = () => {
   const location = useLocation();
   const currentPath = location.pathname;
   const [collapsed, setCollapsed] = useState(false);
+  const { language } = useLanguage();
+  const t = translations[language];
 
   const toggleSidebar = () => {
     setCollapsed(!collapsed);
@@ -54,12 +59,15 @@ const Sidebar = () => {
           <Package className="h-5 w-5 text-black mr-2" />
           {!collapsed && <h1 className="text-xl font-bold">Zakk</h1>}
         </div>
-        <button 
-          onClick={toggleSidebar}
-          className="p-1 rounded-md text-foreground/70 hover:bg-muted/80"
-        >
-          {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
-        </button>
+        <div className="flex items-center gap-1">
+          {!collapsed && <LanguageToggle />}
+          <button 
+            onClick={toggleSidebar}
+            className="p-1 rounded-md text-foreground/70 hover:bg-muted/80"
+          >
+            {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
+          </button>
+        </div>
       </div>
       
       <nav className="flex-1 px-2 py-4 space-y-1">
@@ -69,7 +77,7 @@ const Sidebar = () => {
           active={currentPath === "/hscode-lookup"}
           collapsed={collapsed}
         >
-          Lookup HS codes
+          {t.sidebar.lookupHsCodes}
         </NavItem>
         
         <NavItem 
@@ -78,7 +86,7 @@ const Sidebar = () => {
           active={currentPath === "/"}
           collapsed={collapsed}
         >
-          Process PDF file
+          {t.sidebar.processPdfFile}
         </NavItem>
         
         <NavItem 
@@ -87,7 +95,7 @@ const Sidebar = () => {
           active={currentPath === "/hs-table"}
           collapsed={collapsed}
         >
-          Browse HS table
+          {t.sidebar.browseHsTable}
         </NavItem>
       </nav>
       
@@ -99,7 +107,7 @@ const Sidebar = () => {
             </div>
             <div className="text-sm">
               <div className="font-medium">robert@sivertsen.fo</div>
-              <div className="text-xs text-muted-foreground">Trial</div>
+              <div className="text-xs text-muted-foreground">{t.auth.trial}</div>
             </div>
           </div>
         </div>

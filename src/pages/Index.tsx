@@ -4,6 +4,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import FileUpload from '@/components/FileUpload';
 import { useToast } from '@/hooks/use-toast';
 import { Package } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { translations } from '@/data/translations';
 
 interface CustomsItem {
   hsCode: string;
@@ -16,6 +18,8 @@ const Index = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
+  const { language } = useLanguage();
+  const t = translations[language];
 
   // Check for error message in location state
   useEffect(() => {
@@ -80,17 +84,17 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-custom-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-2xl font-bold mb-6">Process PDF file</h1>
+        <h1 className="text-2xl font-bold mb-6">{t.index.processTitle}</h1>
         
         {/* Instructions aligned to the left above the upload area */}
         <div className="mb-8">
           <div className="flex items-start space-x-3 mb-4">
             <div className="flex-shrink-0 bg-black text-white w-6 h-6 rounded-full flex items-center justify-center text-sm font-medium">1</div>
-            <p className="text-custom-gray-700">Upload your customs document or invoice PDF to automatically extract HS codes and product descriptions.</p>
+            <p className="text-custom-gray-700">{t.index.instruction1}</p>
           </div>
           <div className="flex items-start space-x-3">
             <div className="flex-shrink-0 bg-black text-white w-6 h-6 rounded-full flex items-center justify-center text-sm font-medium">2</div>
-            <p className="text-custom-gray-700">Review the extracted information and return to upload additional documents as needed.</p>
+            <p className="text-custom-gray-700">{t.index.instruction2}</p>
           </div>
         </div>
 
@@ -100,7 +104,7 @@ const Index = () => {
           {isProcessing && (
             <div className="text-center py-4">
               <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-black mb-2"></div>
-              <p className="text-custom-gray-500">Processing your document...</p>
+              <p className="text-custom-gray-500">{t.index.processing}</p>
             </div>
           )}
         </div>

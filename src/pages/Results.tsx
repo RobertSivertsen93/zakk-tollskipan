@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import PdfPreview from '@/components/PdfPreview';
 import ResultsTable from '@/components/ResultsTable';
@@ -5,6 +6,8 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { translations } from '@/data/translations';
 
 interface CustomsItem {
   hsCode: string;
@@ -17,6 +20,8 @@ const Results = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
+  const { language } = useLanguage();
+  const t = translations[language];
   
   // Safely access location.state with default values
   const locationState = location.state || {};
@@ -82,8 +87,8 @@ const Results = () => {
   const handleBack = () => {
     navigate('/');
     toast({
-      title: "Ready for new document",
-      description: "You can now upload a new customs document",
+      title: t.results.readyForNew,
+      description: t.results.uploadDescription,
     });
   };
 
@@ -98,20 +103,20 @@ const Results = () => {
               className="flex items-center gap-2 text-black border-custom-gray-200 hover:bg-custom-gray-100"
             >
               <ArrowLeft className="h-4 w-4" />
-              Upload New Document
+              {t.results.uploadNew}
             </Button>
           </div>
           
           <div className="grid gap-8 lg:grid-cols-2">
             <div>
               <h2 className="text-lg font-medium text-black mb-4">
-                Document Preview
+                {t.results.documentPreview}
               </h2>
               {file && <PdfPreview file={file} />}
             </div>
             <div>
               <h2 className="text-lg font-medium text-black mb-4">
-                Extracted Information
+                {t.results.extractedInfo}
               </h2>
               <ResultsTable data={sampleResults} isVisible={true} />
             </div>

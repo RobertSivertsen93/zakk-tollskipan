@@ -10,29 +10,32 @@ import NotFound from "./pages/NotFound";
 import HSCodeLookup from "./pages/HSCodeLookup";
 import HSTable from "./pages/HSTable";
 import Sidebar from "./components/Sidebar";
+import { LanguageProvider } from "./contexts/LanguageContext";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <div className="flex h-screen">
-          <Sidebar />
-          <main className="flex-1 overflow-auto">
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/results" element={<Results />} />
-              <Route path="/hscode-lookup" element={<HSCodeLookup />} />
-              <Route path="/hs-table" element={<HSTable />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </main>
-        </div>
-      </BrowserRouter>
+      <LanguageProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <div className="flex h-screen">
+            <Sidebar />
+            <main className="flex-1 overflow-auto">
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/results" element={<Results />} />
+                <Route path="/hscode-lookup" element={<HSCodeLookup />} />
+                <Route path="/hs-table" element={<HSTable />} />
+                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </main>
+          </div>
+        </BrowserRouter>
+      </LanguageProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );
