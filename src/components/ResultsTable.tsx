@@ -9,7 +9,7 @@ interface CustomsItem {
   hsCode: string;
   description: string;
   confidence?: number;
-  invoiceId?: string; // Added to identify which invoice the item belongs to
+  invoiceId?: string; // This expects a string type
 }
 
 interface ResultsTableProps {
@@ -23,10 +23,11 @@ export default function ResultsTable({ data, isVisible }: ResultsTableProps) {
   if (!isVisible) return null;
 
   // Ensure each item has a confidence value and invoiceId if not provided
+  // Convert invoiceId to string to match the CustomsItem interface
   const enrichedData = data.map((item, index) => ({
     ...item,
     confidence: item.confidence || Math.floor(Math.random() * 30) + 70, // Random value between 70-99% if not provided
-    invoiceId: item.invoiceId || Math.floor(index / 2) + 1 // Group every 2 items as one invoice for demo purposes
+    invoiceId: item.invoiceId || String(Math.floor(index / 2) + 1) // Convert to string to fix type error
   }));
 
   const handleCopyHsCode = (hsCode: string) => {
@@ -83,7 +84,7 @@ export default function ResultsTable({ data, isVisible }: ResultsTableProps) {
   // Group items by invoice ID
   const groupedItems: Record<string, CustomsItem[]> = {};
   enrichedData.forEach(item => {
-    const id = item.invoiceId?.toString() || '1';
+    const id = item.invoiceId || '1';
     if (!groupedItems[id]) {
       groupedItems[id] = [];
     }
