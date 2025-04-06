@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import FileUpload from '@/components/FileUpload';
 import { useToast } from '@/hooks/use-toast';
-import { Package } from 'lucide-react';
 
 interface CustomsItem {
   hsCode: string;
@@ -80,15 +79,6 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-custom-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
-        <header className="mb-12 text-center">
-          <div className="flex items-center justify-center mb-4">
-            <Package className="h-10 w-10 text-black mr-2" />
-            <h1 className="text-4xl font-light tracking-tight text-black">
-              Tariffy
-            </h1>
-          </div>
-        </header>
-
         <div className="space-y-8">
           <FileUpload onFileSelect={handleFileSelect} />
           
