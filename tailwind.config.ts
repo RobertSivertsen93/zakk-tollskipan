@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,27 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				custom: {
+					blue: {
+						50: '#E6F0F9',
+						100: '#CCE0F3',
+						200: '#99C2E6',
+						300: '#66A3D9',
+						400: '#3385CC',
+						500: '#0369A1', // Primary blue
+						600: '#02588C',
+						700: '#024776',
+						800: '#013561',
+						900: '#01243D',
+					},
+					gray: {
+						50: '#F8FAFC',
+						100: '#F1F5F9',
+						200: '#E2E8F0',
+						300: '#CBD5E1',
+						400: '#94A3B8',
+					}
 				}
 			},
 			borderRadius: {
@@ -84,11 +106,20 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'pulse-upload': {
+					'0%, 100%': {
+						opacity: '1',
+					},
+					'50%': {
+						opacity: '0.7',
+					},
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'pulse-upload': 'pulse-upload 2s ease-in-out infinite',
 			}
 		}
 	},
