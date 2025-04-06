@@ -56,7 +56,7 @@ const Sidebar = () => {
           icon={FileSpreadsheet}
           active={currentPath === "/"}
         >
-          Process Excel file
+          Process PDF file
         </NavItem>
         
         <NavItem 
