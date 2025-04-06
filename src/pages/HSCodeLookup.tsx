@@ -1,6 +1,5 @@
-
 import React, { useState } from "react";
-import { Search, Copy, ChevronDown, ChevronRight } from "lucide-react";
+import { Copy, ChevronDown, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
@@ -130,19 +129,7 @@ const HSCodeLookup: React.FC = () => {
 
   return (
     <div className="flex flex-col h-full w-full bg-background">
-      <div className="p-4 border-b">
-        <div className="relative">
-          <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-          <Input
-            className="pl-10 pr-4"
-            placeholder="Search for product description or HS code..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
-      </div>
-
-      <Tabs defaultValue="hs" className="w-full">
+      <Tabs defaultValue="hs" className="w-full flex-1 flex flex-col">
         <TabsList className="w-full grid grid-cols-7 gap-2 px-4 py-2">
           <TabsTrigger value="hs">HS</TabsTrigger>
           <TabsTrigger value="usa">USA</TabsTrigger>
@@ -286,6 +273,8 @@ const HSCodeLookup: React.FC = () => {
           <Input 
             placeholder="Enter product description" 
             className="w-full pr-28"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
           <Button
             className="absolute right-1 top-1 h-8"
