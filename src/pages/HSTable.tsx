@@ -13,7 +13,7 @@ import { hsCodeSections } from "@/data/hs-code-sections";
 const HSTable = () => {
   return (
     <div className="p-8">
-      <h1 className="text-2xl font-bold mb-6">HS Codes - Harmonized System Nomenclature</h1>
+      <h1 className="text-2xl font-bold mb-6">Toll- og vøruskráin</h1>
       
       <div className="rounded-md border">
         <Table>
