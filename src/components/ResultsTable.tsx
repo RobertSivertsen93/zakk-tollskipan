@@ -1,9 +1,10 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Check, Copy } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Separator } from '@/components/ui/separator';
+import { Checkbox } from '@/components/ui/checkbox';
 
 interface CustomsItem {
   hsCode: string;
@@ -19,6 +20,7 @@ interface ResultsTableProps {
 
 export default function ResultsTable({ data, isVisible }: ResultsTableProps) {
   const { toast } = useToast();
+  const [completedInvoices, setCompletedInvoices] = useState<Record<string, boolean>>({});
   
   if (!isVisible) return null;
 
@@ -61,16 +63,47 @@ export default function ResultsTable({ data, isVisible }: ResultsTableProps) {
     return confidence >= 60 ? 'text-white' : 'text-white';
   };
 
-  // Render invoice header
-  const renderInvoiceHeader = (invoiceId: string) => (
-    <tr>
-      <td colSpan={3} className="py-2">
-        <div className="flex items-center py-2">
-          <div className="font-medium text-custom-gray-500 text-sm">Invoice #{invoiceId}</div>
-        </div>
-      </td>
-    </tr>
-  );
+  const toggleInvoiceComplete = (invoiceId: string) => {
+    setCompletedInvoices(prev => ({
+      ...prev,
+      [invoiceId]: !prev[invoiceId]
+    }));
+    
+    // Notify user with toast
+    const isNowComplete = !completedInvoices[invoiceId];
+    toast({
+      title: isNowComplete ? "Invoice Marked Complete" : "Invoice Marked Incomplete",
+      description: isNowComplete ? 
+        `Invoice #${invoiceId} has been marked as processed` : 
+        `Invoice #${invoiceId} has been marked for further review`,
+    });
+  };
+
+  // Render invoice header with checkbox
+  const renderInvoiceHeader = (invoiceId: string) => {
+    const isComplete = completedInvoices[invoiceId] || false;
+    
+    return (
+      <tr className={isComplete ? "opacity-60" : ""}>
+        <td colSpan={3} className="py-2">
+          <div className="flex items-center py-2 gap-3">
+            <Checkbox 
+              id={`invoice-${invoiceId}`}
+              checked={isComplete}
+              onCheckedChange={() => toggleInvoiceComplete(invoiceId)}
+              className="border-custom-blue-500 text-custom-blue-500 h-5 w-5"
+            />
+            <label 
+              htmlFor={`invoice-${invoiceId}`}
+              className={`font-medium ${isComplete ? 'text-custom-gray-400 line-through' : 'text-custom-gray-500'} text-sm cursor-pointer`}
+            >
+              Invoice #{invoiceId} {isComplete && '(Processed)'}
+            </label>
+          </div>
+        </td>
+      </tr>
+    );
+  };
 
   // Render separator between invoices
   const renderSeparator = () => (
@@ -118,30 +151,40 @@ export default function ResultsTable({ data, isVisible }: ResultsTableProps) {
                 <React.Fragment key={invoiceId}>
                   {groupIndex > 0 && renderSeparator()}
                   {renderInvoiceHeader(invoiceId)}
-                  {items.map((item, index) => (
-                    <tr key={`${invoiceId}-${index}`}>
-                      <td>
-                        <div className="flex items-center gap-2 font-mono">
-                          {item.hsCode}
-                          <button 
-                            onClick={() => handleCopyHsCode(item.hsCode)}
-                            className="p-1 rounded hover:bg-custom-gray-100 transition-colors"
-                            title="Copy HS Code"
-                          >
-                            <Copy className="h-4 w-4 text-custom-blue-500" />
-                          </button>
-                        </div>
-                      </td>
-                      <td>{item.description}</td>
-                      <td>
-                        <div className="flex items-center">
-                          <div className={`${getConfidenceColor(item.confidence)} ${getConfidenceTextColor(item.confidence)} text-center rounded px-2 py-1 font-medium text-sm`}>
-                            {item.confidence}%
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                  <tr className={completedInvoices[invoiceId] ? "opacity-60" : ""}>
+                    <td colSpan={3} className="p-0">
+                      <div className={`overflow-hidden transition-all duration-300 ${completedInvoices[invoiceId] ? 'max-h-0' : 'max-h-[1000px]'}`}>
+                        <table className="w-full">
+                          <tbody>
+                            {items.map((item, index) => (
+                              <tr key={`${invoiceId}-${index}`}>
+                                <td className="px-4 py-3 border-t border-custom-gray-200">
+                                  <div className="flex items-center gap-2 font-mono">
+                                    {item.hsCode}
+                                    <button 
+                                      onClick={() => handleCopyHsCode(item.hsCode)}
+                                      className="p-1 rounded hover:bg-custom-gray-100 transition-colors"
+                                      title="Copy HS Code"
+                                    >
+                                      <Copy className="h-4 w-4 text-custom-blue-500" />
+                                    </button>
+                                  </div>
+                                </td>
+                                <td className="px-4 py-3 border-t border-custom-gray-200">{item.description}</td>
+                                <td className="px-4 py-3 border-t border-custom-gray-200">
+                                  <div className="flex items-center">
+                                    <div className={`${getConfidenceColor(item.confidence)} ${getConfidenceTextColor(item.confidence)} text-center rounded px-2 py-1 font-medium text-sm`}>
+                                      {item.confidence}%
+                                    </div>
+                                  </div>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </td>
+                  </tr>
                 </React.Fragment>
               ))}
             </tbody>
