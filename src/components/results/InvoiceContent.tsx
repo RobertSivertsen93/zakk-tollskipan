@@ -8,32 +8,29 @@ interface InvoiceContentProps {
   isExpanded: boolean;
   isComplete: boolean;
   onCopyHsCode: (hsCode: string) => void;
+  onSelectAlternative?: (alternativeHsCode: string, originalItem: CustomsItem) => void;
 }
 
-export const InvoiceContent: React.FC<InvoiceContentProps> = ({
-  items,
-  isExpanded,
+export const InvoiceContent: React.FC<InvoiceContentProps> = ({ 
+  items, 
+  isExpanded, 
   isComplete,
-  onCopyHsCode
+  onCopyHsCode,
+  onSelectAlternative
 }) => {
   if (!isExpanded) return null;
   
   return (
-    <tr className={isComplete ? "opacity-60" : ""}>
-      <td colSpan={3} className="p-0">
-        <table className="w-full">
-          <tbody>
-            {items.map((item, index) => (
-              <CustomsItemRow 
-                key={`${item.invoiceId}-${index}`} 
-                item={item} 
-                index={index}
-                onCopyHsCode={onCopyHsCode} 
-              />
-            ))}
-          </tbody>
-        </table>
-      </td>
-    </tr>
+    <>
+      {items.map((item, index) => (
+        <CustomsItemRow 
+          key={`${item.hsCode}-${index}`} 
+          item={item} 
+          index={index}
+          onCopyHsCode={onCopyHsCode}
+          onSelectAlternative={onSelectAlternative}
+        />
+      ))}
+    </>
   );
 };

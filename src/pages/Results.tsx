@@ -14,6 +14,11 @@ interface CustomsItem {
   description: string;
   confidence?: number;
   invoiceId?: string;
+  alternatives?: Array<{
+    hsCode: string;
+    description: string;
+    confidence: number;
+  }>;
 }
 
 const Results = () => {
@@ -34,13 +39,32 @@ const Results = () => {
       hsCode: "8471.60.10",
       description: "Computer keyboards",
       confidence: 98,
-      invoiceId: "1"
+      invoiceId: "1",
+      alternatives: [
+        {
+          hsCode: "8471.60.20",
+          description: "Computer input or output units",
+          confidence: 92
+        },
+        {
+          hsCode: "8471.60.90",
+          description: "Other input or output units",
+          confidence: 85
+        }
+      ]
     },
     {
       hsCode: "8471.50.01",
       description: "Processing units for personal computers",
       confidence: 95,
-      invoiceId: "1"
+      invoiceId: "1",
+      alternatives: [
+        {
+          hsCode: "8471.41.00",
+          description: "Processing units with storage and input/output units",
+          confidence: 91
+        }
+      ]
     },
     
     // Invoice 2
@@ -48,13 +72,32 @@ const Results = () => {
       hsCode: "8517.12.00",
       description: "Mobile phones",
       confidence: 97,
-      invoiceId: "2"
+      invoiceId: "2",
+      alternatives: [
+        {
+          hsCode: "8517.18.00",
+          description: "Other telephone sets",
+          confidence: 85
+        }
+      ]
     },
     {
       hsCode: "8523.51.00",
       description: "Solid-state non-volatile storage devices",
       confidence: 92,
-      invoiceId: "2"
+      invoiceId: "2",
+      alternatives: [
+        {
+          hsCode: "8523.52.00",
+          description: "Smart cards",
+          confidence: 84
+        },
+        {
+          hsCode: "8523.59.00",
+          description: "Other semiconductor media",
+          confidence: 78
+        }
+      ]
     },
     
     // Invoice 3
@@ -62,13 +105,32 @@ const Results = () => {
       hsCode: "9503.00.00",
       description: "Toys and models with moving parts",
       confidence: 85,
-      invoiceId: "3"
+      invoiceId: "3",
+      alternatives: [
+        {
+          hsCode: "9504.90.00",
+          description: "Other articles for funfair or table games",
+          confidence: 79
+        }
+      ]
     },
     {
       hsCode: "9504.50.00",
       description: "Video game consoles and machines",
       confidence: 91,
-      invoiceId: "3"
+      invoiceId: "3",
+      alternatives: [
+        {
+          hsCode: "8523.49.00",
+          description: "Optical media for reproducing sound or image",
+          confidence: 76
+        },
+        {
+          hsCode: "9504.30.00",
+          description: "Other games, operated by coins or tokens",
+          confidence: 74
+        }
+      ]
     }
   ];
 

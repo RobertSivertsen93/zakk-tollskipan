@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Check, Copy } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -16,11 +16,12 @@ interface ResultsTableProps {
 
 export default function ResultsTable({ data, isVisible }: ResultsTableProps) {
   const { toast } = useToast();
+  const [itemsData, setItemsData] = useState<CustomsItem[]>(data);
   
   if (!isVisible) return null;
 
   // Ensure each item has a confidence value and invoiceId if not provided
-  const enrichedData = data.map((item, index) => ({
+  const enrichedData = itemsData.map((item, index) => ({
     ...item,
     confidence: item.confidence || Math.floor(Math.random() * 30) + 70, // Random value between 70-99% if not provided
     invoiceId: item.invoiceId || String(Math.floor(index / 2) + 1) // Convert to string to fix type error
@@ -50,6 +51,48 @@ export default function ResultsTable({ data, isVisible }: ResultsTableProps) {
         });
         console.error('Failed to copy: ', err);
       });
+  };
+
+  const handleSelectAlternative = (alternativeHsCode: string, originalItem: CustomsItem) => {
+    // Update the items array with the selected alternative
+    setItemsData(prevItems => 
+      prevItems.map(item => {
+        if (item === originalItem) {
+          // Find the alternative in the original item
+          const selectedAlt = originalItem.alternatives?.find(
+            alt => alt.hsCode === alternativeHsCode
+          );
+          
+          if (selectedAlt) {
+            // Create new alternatives array without the selected one
+            const updatedAlternatives = [
+              { 
+                hsCode: originalItem.hsCode, 
+                description: originalItem.description,
+                confidence: originalItem.confidence || 0 
+              },
+              ...(originalItem.alternatives || [])
+                .filter(alt => alt.hsCode !== alternativeHsCode)
+            ];
+            
+            // Return updated item with the selected alternative as the main HS code
+            return {
+              ...item,
+              hsCode: selectedAlt.hsCode,
+              description: selectedAlt.description, 
+              confidence: selectedAlt.confidence,
+              alternatives: updatedAlternatives
+            };
+          }
+        }
+        return item;
+      })
+    );
+
+    toast({
+      title: "HS Code changed",
+      description: `Changed to ${alternativeHsCode}`,
+    });
   };
 
   // Render separator between invoices
@@ -106,6 +149,7 @@ export default function ResultsTable({ data, isVisible }: ResultsTableProps) {
                       isExpanded={isExpanded}
                       isComplete={isComplete}
                       onCopyHsCode={handleCopyHsCode}
+                      onSelectAlternative={handleSelectAlternative}
                     />
                   </React.Fragment>
                 );
