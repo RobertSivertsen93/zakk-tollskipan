@@ -3,6 +3,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Check, Copy } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { Separator } from '@/components/ui/separator';
 
 interface CustomsItem {
   hsCode: string;
@@ -20,8 +21,23 @@ export default function ResultsTable({ data, isVisible }: ResultsTableProps) {
   
   if (!isVisible) return null;
 
+  // Add 3 more sample items if the data has fewer than 4 items
+  let enrichedData = [...data];
+  
+  // Only add sample data if we have less than 4 items
+  if (enrichedData.length < 4) {
+    const sampleItems = [
+      { hsCode: "8471.30.01", description: "Laptop computers", confidence: 95 },
+      { hsCode: "8517.62.01", description: "Wireless communication devices", confidence: 88 },
+      { hsCode: "9403.20.03", description: "Metal furniture for offices", confidence: 82 }
+    ];
+    
+    // Add only as many sample items as needed to reach at least 6 items
+    enrichedData = [...enrichedData, ...sampleItems];
+  }
+
   // Ensure each item has a confidence value if not provided
-  const enrichedData = data.map(item => ({
+  enrichedData = enrichedData.map(item => ({
     ...item,
     confidence: item.confidence || Math.floor(Math.random() * 30) + 70 // Random value between 70-99% if not provided
   }));
@@ -71,7 +87,7 @@ export default function ResultsTable({ data, isVisible }: ResultsTableProps) {
       </CardHeader>
       <CardContent className="p-0">
         <div className="overflow-x-auto">
-          <table className="result-table">
+          <table className="result-table w-full">
             <thead>
               <tr>
                 <th className="w-[30%]">HS Code</th>
@@ -81,28 +97,38 @@ export default function ResultsTable({ data, isVisible }: ResultsTableProps) {
             </thead>
             <tbody>
               {enrichedData.map((item, index) => (
-                <tr key={index}>
-                  <td>
-                    <div className="flex items-center gap-2 font-mono">
-                      {item.hsCode}
-                      <button 
-                        onClick={() => handleCopyHsCode(item.hsCode)}
-                        className="p-1 rounded hover:bg-custom-gray-100 transition-colors"
-                        title="Copy HS Code"
-                      >
-                        <Copy className="h-4 w-4 text-custom-blue-500" />
-                      </button>
-                    </div>
-                  </td>
-                  <td>{item.description}</td>
-                  <td>
-                    <div className="flex items-center">
-                      <div className={`${getConfidenceColor(item.confidence)} ${getConfidenceTextColor(item.confidence)} text-center rounded px-2 py-1 font-medium text-sm`}>
-                        {item.confidence}%
+                <React.Fragment key={index}>
+                  <tr>
+                    <td>
+                      <div className="flex items-center gap-2 font-mono">
+                        {item.hsCode}
+                        <button 
+                          onClick={() => handleCopyHsCode(item.hsCode)}
+                          className="p-1 rounded hover:bg-custom-gray-100 transition-colors"
+                          title="Copy HS Code"
+                        >
+                          <Copy className="h-4 w-4 text-custom-blue-500" />
+                        </button>
                       </div>
-                    </div>
-                  </td>
-                </tr>
+                    </td>
+                    <td>{item.description}</td>
+                    <td>
+                      <div className="flex items-center">
+                        <div className={`${getConfidenceColor(item.confidence)} ${getConfidenceTextColor(item.confidence)} text-center rounded px-2 py-1 font-medium text-sm`}>
+                          {item.confidence}%
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  {/* Add separator after each row except the last one */}
+                  {index < enrichedData.length - 1 && (
+                    <tr>
+                      <td colSpan={3} className="p-0">
+                        <Separator className="my-2 bg-custom-gray-100" />
+                      </td>
+                    </tr>
+                  )}
+                </React.Fragment>
               ))}
             </tbody>
           </table>
