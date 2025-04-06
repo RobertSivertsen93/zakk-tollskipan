@@ -6,21 +6,9 @@ import { useLanguage } from "@/contexts/LanguageContext";
 const LanguageToggle = () => {
   const { language, toggleLanguage } = useLanguage();
   
-  // Custom flags using SVG for Faroe Islands and UK
+  // Using flag emoji for Faroe Islands and UK
   const FaroeseFlag = () => (
-    <svg 
-      xmlns="http://www.w3.org/2000/svg" 
-      viewBox="0 0 16 12" 
-      width="16" 
-      height="12" 
-      className="h-4 w-5"
-      aria-hidden="true"
-    >
-      <rect width="16" height="12" fill="#FFFFFF"/>
-      <path d="M0,0 L16,12 M0,12 L16,0" stroke="#FF0000" strokeWidth="0.5" fill="none"/>
-      <rect x="0" y="4" width="16" height="4" fill="#0035AD"/>
-      <rect x="4" y="0" width="4" height="12" fill="#FF0000"/>
-    </svg>
+    <span className="text-lg" aria-hidden="true">🇫🇴</span>
   );
   
   const EnglishFlag = () => (
