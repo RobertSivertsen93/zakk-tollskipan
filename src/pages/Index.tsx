@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import FileUpload from '@/components/FileUpload';
@@ -79,8 +80,10 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-custom-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
-        {/* Instructions moved above the upload area */}
-        <div className="max-w-lg mx-auto mb-8">
+        <h1 className="text-2xl font-bold mb-6">Process PDF file</h1>
+        
+        {/* Instructions aligned to the left above the upload area */}
+        <div className="mb-8">
           <div className="flex items-start space-x-3 mb-4">
             <div className="flex-shrink-0 bg-black text-white w-6 h-6 rounded-full flex items-center justify-center text-sm font-medium">1</div>
             <p className="text-custom-gray-700">Upload your customs document or invoice PDF to automatically extract HS codes and product descriptions.</p>
