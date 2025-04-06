@@ -62,11 +62,16 @@ const Sidebar = () => {
           </div>
         )}
         {collapsed && (
-          <Package className="h-5 w-5 text-black mx-auto" />
+          <div className="mx-auto">
+            <Package className="h-6 w-6 text-black" />
+          </div>
         )}
         <button 
           onClick={toggleSidebar}
-          className="p-1 rounded-md text-foreground/70 hover:bg-muted/80"
+          className={cn(
+            "p-1 rounded-md text-foreground/70 hover:bg-muted/80",
+            collapsed && "absolute right-2"
+          )}
         >
           {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
         </button>
