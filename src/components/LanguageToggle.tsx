@@ -12,10 +12,10 @@ const LanguageToggle = () => {
       variant="ghost" 
       size="sm" 
       onClick={toggleLanguage}
-      className="flex gap-1 items-center"
+      className="flex items-center justify-center p-1 h-8 w-8 rounded-full"
+      title={language === "en" ? "Switch to Faroese" : "Switch to English"}
     >
       <Languages className="h-4 w-4" />
-      <span>{language === "en" ? "FO" : "EN"}</span>
     </Button>
   );
 };
