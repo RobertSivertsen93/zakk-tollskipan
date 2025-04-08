@@ -66,12 +66,12 @@ export default function ResultsTable({ data, isVisible }: ResultsTableProps) {
       </CardHeader>
       <CardContent className="p-0">
         <div className="overflow-x-auto">
-          <table className="result-table">
+          <table className="w-full">
             <thead>
-              <tr>
-                <th className="w-[30%]">HS Code</th>
-                <th className="w-[50%]">Product Description</th>
-                <th className="w-[20%]">Confidence</th>
+              <tr className="bg-custom-gray-50 border-b border-custom-gray-200">
+                <th className="text-left py-3 px-4 font-medium text-custom-gray-600 text-sm w-[30%]">HS Code</th>
+                <th className="text-left py-3 px-4 font-medium text-custom-gray-600 text-sm w-[50%]">Product Description</th>
+                <th className="text-left py-3 px-4 font-medium text-custom-gray-600 text-sm w-[20%]">Confidence</th>
               </tr>
             </thead>
             <tbody>

@@ -1,10 +1,11 @@
 
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { ArrowLeft, Calendar, Search, HelpCircle, Download, Printer } from 'lucide-react';
+import { ArrowLeft, Download, Printer, File, Database } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { translations } from '@/data/translations';
@@ -19,6 +20,7 @@ const DetailedResults = () => {
   const { toast } = useToast();
   const { language } = useLanguage();
   const t = translations[language];
+  const [activeTab, setActiveTab] = useState("document");
   
   // Get the file from location state or set to null
   const locationState = location.state || {};
@@ -120,6 +122,7 @@ const DetailedResults = () => {
     <div className="min-h-screen bg-custom-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="space-y-6">
+          {/* Header with back button and actions */}
           <div className="flex justify-between items-center">
             <Button 
               variant="outline" 
@@ -129,6 +132,7 @@ const DetailedResults = () => {
               <ArrowLeft className="h-4 w-4" />
               Back to Results
             </Button>
+            
             <div className="flex items-center gap-3">
               <Button 
                 variant="outline"
@@ -156,17 +160,35 @@ const DetailedResults = () => {
             </div>
           </div>
           
-          <div className="grid gap-6 lg:grid-cols-5">
-            {/* Left column - PDF Preview */}
-            <div className="lg:col-span-2">
-              <Card className="border border-custom-gray-200 h-full shadow-sm bg-white">
-                <CardContent className="p-0 h-full">
+          {/* Tab navigation */}
+          <Tabs defaultValue="document" className="w-full" onValueChange={setActiveTab}>
+            <TabsList className="grid w-full grid-cols-2 bg-custom-gray-100 rounded-lg p-1">
+              <TabsTrigger 
+                value="document" 
+                className={`flex items-center gap-2 ${activeTab === "document" ? "bg-white" : ""}`}
+              >
+                <File className="h-4 w-4" />
+                Document Preview
+              </TabsTrigger>
+              <TabsTrigger 
+                value="data" 
+                className={`flex items-center gap-2 ${activeTab === "data" ? "bg-white" : ""}`}
+              >
+                <Database className="h-4 w-4" />
+                Invoice Data
+              </TabsTrigger>
+            </TabsList>
+            
+            {/* Document preview content */}
+            <TabsContent value="document" className="pt-4">
+              <Card className="border border-custom-gray-200 shadow-sm bg-white">
+                <CardContent className="p-0">
                   <div className="p-4 bg-custom-gray-50 border-b border-custom-gray-200">
                     <h2 className="text-lg font-medium text-black">
                       Document Preview
                     </h2>
                   </div>
-                  <div className="p-4 h-[calc(100%-64px)] min-h-[600px]">
+                  <div className="p-4 min-h-[700px]">
                     {file ? (
                       <PdfPreview file={file} />
                     ) : (
@@ -179,10 +201,10 @@ const DetailedResults = () => {
                   </div>
                 </CardContent>
               </Card>
-            </div>
+            </TabsContent>
             
-            {/* Right column - Invoice Info and Line Items */}
-            <div className="lg:col-span-3 space-y-6">
+            {/* Invoice data content */}
+            <TabsContent value="data" className="pt-4 space-y-6">
               <InvoiceInfoSection invoice={invoiceData} onUpdate={setInvoiceData} />
               <LineItemsTable 
                 items={invoiceData.items} 
@@ -193,8 +215,8 @@ const DetailedResults = () => {
                   }));
                 }} 
               />
-            </div>
-          </div>
+            </TabsContent>
+          </Tabs>
         </div>
       </div>
     </div>
