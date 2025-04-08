@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import PdfPreview from '@/components/PdfPreview';
 import ResultsTable from '@/components/ResultsTable';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -154,6 +154,15 @@ const Results = () => {
     });
   };
 
+  const handleViewDetailed = () => {
+    navigate('/detailed-results', { 
+      state: { 
+        file: file,
+        results: sampleResults 
+      }
+    });
+  };
+
   return (
     <div className="min-h-screen bg-custom-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
@@ -166,6 +175,15 @@ const Results = () => {
             >
               <ArrowLeft className="h-4 w-4" />
               {t.results.uploadNew}
+            </Button>
+            
+            <Button 
+              variant="default"
+              onClick={handleViewDetailed}
+              className="flex items-center gap-2 bg-custom-blue-500 hover:bg-custom-blue-600"
+            >
+              View Detailed Results
+              <ArrowRight className="h-4 w-4" />
             </Button>
           </div>
           

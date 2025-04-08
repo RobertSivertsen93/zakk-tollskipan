@@ -104,4 +104,9 @@
   .result-table tr:nth-child(even) {
     @apply bg-custom-gray-50;
   }
+
+  .required-field::after {
+    content: " *";
+    color: theme('colors.red.500');
+  }
 }

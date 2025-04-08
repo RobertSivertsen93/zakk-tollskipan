@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Results from "./pages/Results";
+import DetailedResults from "./pages/DetailedResults";
 import NotFound from "./pages/NotFound";
 import HSCodeLookup from "./pages/HSCodeLookup";
 import HSTable from "./pages/HSTable";
@@ -27,6 +28,7 @@ const App = () => (
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/results" element={<Results />} />
+                <Route path="/detailed-results" element={<DetailedResults />} />
                 <Route path="/hscode-lookup" element={<HSCodeLookup />} />
                 <Route path="/hs-table" element={<HSTable />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
