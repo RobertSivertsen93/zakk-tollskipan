@@ -21,6 +21,20 @@ export const translations = {
     },
     auth: {
       trial: "Trial",
+      login: "Login",
+      signIn: "Sign in",
+      signUp: "Sign up",
+      email: "Email",
+      password: "Password",
+      forgotPassword: "Forgot password?",
+      rememberMe: "Remember me",
+      signInWithEmail: "Sign in with Email",
+      continueWith: "Or continue with",
+      github: "GitHub",
+      dontHaveAccount: "Don't have an account?",
+      createAccount: "Create an account",
+      signInToAccount: "Sign in to your account",
+      enterCredentials: "Enter your credentials below to access the system"
     }
   },
   fo: {
@@ -44,6 +58,20 @@ export const translations = {
     },
     auth: {
       trial: "Royndarútgáva",
+      login: "Rita inn",
+      signIn: "Rita inn",
+      signUp: "Stovna",
+      email: "T-postur",
+      password: "Loyniorð",
+      forgotPassword: "Gloymt loyniorð?",
+      rememberMe: "Minst til meg",
+      signInWithEmail: "Rita inn við t-posti",
+      continueWith: "Ella halt fram við",
+      github: "GitHub",
+      dontHaveAccount: "Hevur tú ikki eina kontu?",
+      createAccount: "Stovna kontu",
+      signInToAccount: "Rita inn á tína kontu",
+      enterCredentials: "Skriva tínar upplýsingar niðanfyri fyri at fáa atgongd til skipanina"
     }
   }
 };
