@@ -1,11 +1,13 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { translations } from "../data/translations";
 
 type Language = "en" | "fo";
 
 interface LanguageContextType {
   language: Language;
   toggleLanguage: () => void;
+  translations: typeof translations;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -27,7 +29,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <LanguageContext.Provider value={{ language, toggleLanguage }}>
+    <LanguageContext.Provider value={{ language, toggleLanguage, translations }}>
       {children}
     </LanguageContext.Provider>
   );
